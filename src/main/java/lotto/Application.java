@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
+import lotto.domain.UserPurchase;
 import lotto.enums.LottoConfig;
 import lotto.enums.LottoRule;
 import lotto.service.LottoIssuer;
@@ -28,6 +29,8 @@ public class Application {
         List<Lotto> lottos = lottoIssuer.issue(lottoCount);
         outputView.printLottoNumber(lottos);
         outputView.printBlankLine();
+
+        UserPurchase userPurchase = new UserPurchase(purchasePrice, lottos);
 
         String winningNumber = inputView.readWinningNumber();
         outputView.printBlankLine();
