@@ -1,6 +1,5 @@
 package lotto;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
@@ -9,6 +8,7 @@ import lotto.domain.WinningLotto;
 import lotto.enums.LottoConfig;
 import lotto.enums.LottoRule;
 import lotto.service.LottoIssuer;
+import lotto.service.LottoMatcher;
 import lotto.util.WinningNumberParser;
 import lotto.view.InputView;
 import lotto.view.OutputView;
@@ -21,6 +21,7 @@ public class Application {
         OutputView outputView = new OutputView();
         LottoIssuer lottoIssuer = new LottoIssuer();
         WinningNumberParser winningNumberParser = new WinningNumberParser();
+        LottoMatcher lottoMatcher = new LottoMatcher();
 
         int purchasePrice = Integer.parseInt(inputView.readPurchasePrice());
         outputView.printBlankLine();
@@ -45,12 +46,7 @@ public class Application {
 
         WinningLotto winningLotto = new WinningLotto(parsedWinningNumbers, bonusNumber);
 
-        Map<LottoRule, Integer> result = new EnumMap<>(LottoRule.class);
-        result.put(LottoRule.FIRST, 0);
-        result.put(LottoRule.SECOND, 1);
-        result.put(LottoRule.THIRD, 2);
-        result.put(LottoRule.FOURTH, 3);
-        result.put(LottoRule.FIFTH, 4);
+        Map<LottoRule, Integer> result = lottoMatcher.match(userPurchase.getLottos(), winningLotto);
 
         outputView.printWinningResult(result);
 
