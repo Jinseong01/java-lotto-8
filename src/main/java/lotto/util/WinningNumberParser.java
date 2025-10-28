@@ -16,7 +16,7 @@ public class WinningNumberParser {
                     .map(Integer::parseInt)
                     .toList();
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_ONLY_INTEGER));
+            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_NON_INTEGER));
         }
     }
 
