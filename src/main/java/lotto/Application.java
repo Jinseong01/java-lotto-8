@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
 import lotto.domain.UserPurchase;
+import lotto.domain.WinningLotto;
 import lotto.enums.LottoConfig;
 import lotto.enums.LottoRule;
 import lotto.service.LottoIssuer;
@@ -19,7 +20,6 @@ public class Application {
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
         LottoIssuer lottoIssuer = new LottoIssuer();
-
         WinningNumberParser winningNumberParser = new WinningNumberParser();
 
         int purchasePrice = Integer.parseInt(inputView.readPurchasePrice());
@@ -40,8 +40,10 @@ public class Application {
 
         List<Integer> parsedWinningNumbers = winningNumberParser.parse(winningNumbers);
 
-        String bonusNumber = inputView.readBounusNumber();
+        int bonusNumber = Integer.parseInt(inputView.readBounusNumber());
         outputView.printBlankLine();
+
+        WinningLotto winningLotto = new WinningLotto(parsedWinningNumbers, bonusNumber);
 
         Map<LottoRule, Integer> result = new EnumMap<>(LottoRule.class);
         result.put(LottoRule.FIRST, 0);
