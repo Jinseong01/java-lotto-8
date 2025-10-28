@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
+import lotto.enums.LottoConfig;
 import lotto.enums.LottoRule;
 import lotto.service.LottoIssuer;
 import lotto.view.InputView;
@@ -17,12 +18,14 @@ public class Application {
         OutputView outputView = new OutputView();
         LottoIssuer lottoIssuer = new LottoIssuer();
 
-        int price = Integer.parseInt(inputView.readPurchasePrice());
+        int purchasePrice = Integer.parseInt(inputView.readPurchasePrice());
         outputView.printBlankLine();
 
-        outputView.printLottoCount(price / 1000);
+        int lottoPrice = LottoConfig.LOTTO_PRICE.getValue();
+        int lottoCount = purchasePrice / lottoPrice;
+        outputView.printLottoCount(lottoCount);
 
-        List<Lotto> lottos = lottoIssuer.issue(price / 1000);
+        List<Lotto> lottos = lottoIssuer.issue(lottoCount);
         outputView.printLottoNumber(lottos);
         outputView.printBlankLine();
 
