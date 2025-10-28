@@ -3,6 +3,7 @@ package lotto.view;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import lotto.domain.Lotto;
 import lotto.enums.LottoRule;
 import lotto.enums.OutputMessage;
 
@@ -11,9 +12,9 @@ public class OutputView {
         System.out.println(String.format(OutputMessage.VIEW_LOTTO_COUNT.getMessage(), lottoCount));
     }
 
-    public void printLottoNumber(List<List<Integer>> lottoNumbers) {
-        lottoNumbers.forEach(lottoNumber -> {
-            System.out.println(lottoNumber.toString());
+    public void printLottoNumber(List<Lotto> lottos) {
+        lottos.forEach(lotto -> {
+            System.out.println(lotto.getNumbers());
         });
     }
 
