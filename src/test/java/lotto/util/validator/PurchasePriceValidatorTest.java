@@ -1,4 +1,4 @@
-package lotto.util;
+package lotto.util.validator;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

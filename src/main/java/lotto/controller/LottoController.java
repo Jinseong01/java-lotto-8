@@ -1,18 +1,20 @@
 package lotto.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
 import lotto.domain.UserPurchase;
 import lotto.domain.WinningLotto;
 import lotto.enums.LottoConfig;
-import lotto.enums.LottoRule;
+import lotto.enums.LottoRank;
 import lotto.service.LottoAnalyzer;
 import lotto.service.LottoIssuer;
-import lotto.util.BonusNumberParser;
-import lotto.util.PurchasePriceParser;
-import lotto.util.PurchasePriceValidator;
-import lotto.util.WinningNumberParser;
+import lotto.util.parser.BonusNumberParser;
+import lotto.util.parser.PurchasePriceParser;
+import lotto.util.parser.WinningNumberParser;
+import lotto.util.validator.BonusNumberValidator;
+import lotto.util.validator.PurchasePriceValidator;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -26,12 +28,13 @@ public class LottoController {
     private final PurchasePriceValidator purchasePriceValidator;
     private final WinningNumberParser winningNumberParser;
     private final BonusNumberParser bonusNumberParser;
+    private final BonusNumberValidator bonusNumberValidator;
 
 
     public LottoController(InputView inputView, OutputView outputView, LottoIssuer lottoIssuer,
                            LottoAnalyzer lottoAnalyzer, PurchasePriceParser purchasePriceParser,
                            PurchasePriceValidator purchasePriceValidator, WinningNumberParser winningNumberParser,
-                           BonusNumberParser bonusNumberParser) {
+                           BonusNumberParser bonusNumberParser, BonusNumberValidator bonusNumberValidator) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.lottoIssuer = lottoIssuer;
@@ -40,11 +43,11 @@ public class LottoController {
         this.purchasePriceValidator = purchasePriceValidator;
         this.winningNumberParser = winningNumberParser;
         this.bonusNumberParser = bonusNumberParser;
+        this.bonusNumberValidator = bonusNumberValidator;
     }
 
     public void run() {
         int purchasePrice = readPurchasePrice();
-        outputView.printBlankLine();
 
         int lottoPrice = LottoConfig.LOTTO_PRICE.getValue();
         int lottoCount = purchasePrice / lottoPrice;
@@ -52,21 +55,16 @@ public class LottoController {
 
         List<Lotto> lottos = lottoIssuer.issue(lottoCount);
         outputView.printLottoNumber(lottos);
-        outputView.printBlankLine();
 
         UserPurchase userPurchase = new UserPurchase(purchasePrice, lottos);
 
-        String winningNumbers = inputView.readWinningNumber();
-        outputView.printBlankLine();
+        List<Integer> parsedWinningNumbers = readWinningNumber();
 
-        List<Integer> parsedWinningNumbers = winningNumberParser.parse(winningNumbers);
-
-        int bonusNumber = bonusNumberParser.parse(inputView.readBounusNumber());
-        outputView.printBlankLine();
+        int bonusNumber = readBonusNumber(parsedWinningNumbers);
 
         WinningLotto winningLotto = new WinningLotto(parsedWinningNumbers, bonusNumber);
 
-        Map<LottoRule, Integer> result = lottoAnalyzer.match(userPurchase.getLottos(), winningLotto);
+        Map<LottoRank, Integer> result = lottoAnalyzer.match(userPurchase.getLottos(), winningLotto);
 
         outputView.printWinningResult(result);
 
@@ -79,11 +77,45 @@ public class LottoController {
         while (true) {
             try {
                 String input = inputView.readPurchasePrice();
+
                 int purchasePrice = purchasePriceParser.parse(input);
                 purchasePriceValidator.validate(purchasePrice);
+
+                outputView.printBlankLine();
                 return purchasePrice;
             } catch (IllegalArgumentException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
+    }
+
+    private List<Integer> readWinningNumber() {
+        while (true) {
+            try {
+                String input = inputView.readWinningNumber();
+                List<Integer> parsedWinningNumbers = winningNumberParser.parse(input);
+                // TODO WinningNumberValidator 구현
                 outputView.printBlankLine();
+                return parsedWinningNumbers;
+            } catch (IllegalArgumentException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
+    }
+
+    private int readBonusNumber(List<Integer> parsedWinningNumbers) {
+        while (true) {
+            try {
+                String input = inputView.readBounusNumber();
+                int bonusNumber = bonusNumberParser.parse(input);
+
+                List<Integer> winningLottoNumbers = new ArrayList<>(parsedWinningNumbers);
+                winningLottoNumbers.add(bonusNumber);
+                bonusNumberValidator.validate(winningLottoNumbers);
+                outputView.printBlankLine();
+
+                return bonusNumber;
+            } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }

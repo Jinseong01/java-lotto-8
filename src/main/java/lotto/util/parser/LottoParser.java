@@ -1,4 +1,4 @@
-package lotto.util;
+package lotto.util.parser;
 
 public abstract class LottoParser<T> {
 

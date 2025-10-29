@@ -3,10 +3,11 @@ package lotto;
 import lotto.controller.LottoController;
 import lotto.service.LottoAnalyzer;
 import lotto.service.LottoIssuer;
-import lotto.util.BonusNumberParser;
-import lotto.util.PurchasePriceParser;
-import lotto.util.PurchasePriceValidator;
-import lotto.util.WinningNumberParser;
+import lotto.util.parser.BonusNumberParser;
+import lotto.util.parser.PurchasePriceParser;
+import lotto.util.validator.BonusNumberValidator;
+import lotto.util.validator.PurchasePriceValidator;
+import lotto.util.parser.WinningNumberParser;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -21,10 +22,11 @@ public class Application {
         PurchasePriceValidator purchasePriceValidator = new PurchasePriceValidator();
         WinningNumberParser winningNumberParser = new WinningNumberParser();
         BonusNumberParser bonusNumberParser = new BonusNumberParser();
+        BonusNumberValidator bonusNumberValidator = new BonusNumberValidator();
         LottoAnalyzer lottoAnalyzer = new LottoAnalyzer();
 
         LottoController lottoController = new LottoController(inputView, outputView, lottoIssuer, lottoAnalyzer,
-                purchasePriceParser, purchasePriceValidator, winningNumberParser, bonusNumberParser);
+                purchasePriceParser, purchasePriceValidator, winningNumberParser, bonusNumberParser, bonusNumberValidator);
 
         lottoController.run();
     }

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
-import lotto.enums.LottoRule;
+import lotto.enums.LottoRank;
 import lotto.enums.OutputMessage;
 
 public class OutputView {
@@ -13,20 +13,22 @@ public class OutputView {
     }
 
     public void printLottoNumber(List<Lotto> lottos) {
+        StringBuilder sb = new StringBuilder();
         lottos.forEach(lotto -> {
-            System.out.println(lotto.getNumbers());
+            sb.append(lotto.getNumbers()).append("\n");
         });
+        System.out.println(sb);
     }
 
-    public void printWinningResult(Map<LottoRule, Integer> prizeCounts) {
+    public void printWinningResult(Map<LottoRank, Integer> prizeCounts) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(OutputMessage.VIEW_WINNING_HEADER.getMessage()).append("\n");
 
-        Arrays.stream(LottoRule.values()).forEach(lottoRule -> {
-            int count = prizeCounts.get(lottoRule);
-            sb.append(String.format(OutputMessage.VIEW_WINNING_RESULT.getMessage(), lottoRule.getDescription(),
-                    String.format("%,d", lottoRule.getPrize()), count)).append("\n");
+        Arrays.stream(LottoRank.values()).forEach(lottoRank -> {
+            int count = prizeCounts.get(lottoRank);
+            sb.append(String.format(OutputMessage.VIEW_WINNING_RESULT.getMessage(), lottoRank.getDescription(),
+                    String.format("%,d", lottoRank.getPrize()), count)).append("\n");
         });
         System.out.print(sb);
     }
@@ -40,6 +42,6 @@ public class OutputView {
     }
 
     public void printErrorMessage(String errorMessage) {
-        System.out.println(errorMessage);
+        System.out.println("\n" + errorMessage);
     }
 }

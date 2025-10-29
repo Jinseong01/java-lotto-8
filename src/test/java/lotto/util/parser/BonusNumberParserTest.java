@@ -1,30 +1,29 @@
-package lotto.util;
+package lotto.util.parser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.List;
 import lotto.enums.ErrorMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class PurchasePriceParserTest {
+public class BonusNumberParserTest {
 
-    private final PurchasePriceParser purchasePriceParser = new PurchasePriceParser();
+    private final BonusNumberParser bonusNumberParser = new BonusNumberParser();
 
     @Test
     @DisplayName("정상 입력 문자열의 경우, 파싱되는지 확인")
     public void testParse() {
         // given
-        String input = "8000";
+        String input = "7";
 
         // when
-        int result = purchasePriceParser.parse(input);
+        int result = bonusNumberParser.parse(input);
 
         // then
-        assertThat(result).isEqualTo(8000);
+        assertThat(result).isEqualTo(7);
     }
 
     @ParameterizedTest
@@ -32,9 +31,9 @@ public class PurchasePriceParserTest {
     @ValueSource(strings = {"", " "})
     public void testParseBlank(String input) {
         // when & then
-        assertThatThrownBy(() -> purchasePriceParser.parse(input))
+        assertThatThrownBy(() -> bonusNumberParser.parse(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_BLANK));
+                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_BONUS_NUMBER_BLANK));
     }
 
     @ParameterizedTest
@@ -42,9 +41,9 @@ public class PurchasePriceParserTest {
     @ValueSource(strings = {"A", "0.1", "."})
     public void testParseNonInteger(String input) {
         // when & then
-        assertThatThrownBy(() -> purchasePriceParser.parse(input))
+        assertThatThrownBy(() -> bonusNumberParser.parse(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_NON_INTEGER));
+                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_BONUS_NUMBER_NON_INTEGER));
 
     }
 }

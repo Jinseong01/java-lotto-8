@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
 import lotto.domain.WinningLotto;
-import lotto.enums.LottoRule;
+import lotto.enums.LottoRank;
 
 public class LottoAnalyzer {
-    public Map<LottoRule, Integer> match(List<Lotto> lottos, WinningLotto winningLotto) {
-        EnumMap<LottoRule, Integer> result = initResult();
+    public Map<LottoRank, Integer> match(List<Lotto> lottos, WinningLotto winningLotto) {
+        EnumMap<LottoRank, Integer> result = initResult();
 
         List<Integer> winningNumbers = winningLotto.getLotto().getNumbers();
         int bonusNumber = winningLotto.getBonus();
@@ -20,29 +20,29 @@ public class LottoAnalyzer {
         return result;
     }
 
-    public double calculateRateOfReturn(int price, Map<LottoRule, Integer> lottoResult) {
+    public double calculateRateOfReturn(int price, Map<LottoRank, Integer> lottoResult) {
         int totalWinningPrice = 0;
 
-        for (Map.Entry<LottoRule, Integer> entry : lottoResult.entrySet()) {
-            LottoRule rule = entry.getKey();
+        for (Map.Entry<LottoRank, Integer> entry : lottoResult.entrySet()) {
+            LottoRank lottoRank = entry.getKey();
             int count = entry.getValue();
 
-            totalWinningPrice += rule.getPrize() * count;
+            totalWinningPrice += lottoRank.getPrize() * count;
         }
 
         double rateOfReturn = ((double) totalWinningPrice / price) * 100;
         return Math.round(rateOfReturn * 10) / 10.0;
     }
 
-    private EnumMap<LottoRule, Integer> initResult() {
-        EnumMap<LottoRule, Integer> map = new EnumMap<>(LottoRule.class);
-        Arrays.stream(LottoRule.values())
-                .forEach(rule -> map.put(rule, 0));
+    private EnumMap<LottoRank, Integer> initResult() {
+        EnumMap<LottoRank, Integer> map = new EnumMap<>(LottoRank.class);
+        Arrays.stream(LottoRank.values())
+                .forEach(rank -> map.put(rank, 0));
         return map;
     }
 
     private void checkPrize(Lotto lotto, List<Integer> winningNumbers, int bonusNumber,
-                            EnumMap<LottoRule, Integer> result) {
+                            EnumMap<LottoRank, Integer> result) {
         int matchCount = countMatchingNumbers(lotto.getNumbers(), winningNumbers);
         boolean bonusMatch = false;
 
@@ -50,10 +50,10 @@ public class LottoAnalyzer {
             bonusMatch = isBonusMatched(lotto.getNumbers(), bonusNumber);
         }
 
-        LottoRule lottoRule = determineLottoRule(matchCount, bonusMatch);
+        LottoRank lottoRank = determineLottoRank(matchCount, bonusMatch);
 
-        if (lottoRule != null) {
-            result.put(lottoRule, result.get(lottoRule) + 1);
+        if (lottoRank != null) {
+            result.put(lottoRank, result.get(lottoRank) + 1);
         }
     }
 
@@ -68,21 +68,21 @@ public class LottoAnalyzer {
         return numbers.contains(bonusNumber);
     }
 
-    private LottoRule determineLottoRule(int matchCount, boolean bonusMatch) {
+    private LottoRank determineLottoRank(int matchCount, boolean bonusMatch) {
         if (matchCount == 6) {
-            return LottoRule.FIRST;
+            return LottoRank.FIRST;
         }
         if (matchCount == 5 && bonusMatch) {
-            return LottoRule.SECOND;
+            return LottoRank.SECOND;
         }
         if (matchCount == 5) {
-            return LottoRule.THIRD;
+            return LottoRank.THIRD;
         }
         if (matchCount == 4) {
-            return LottoRule.FOURTH;
+            return LottoRank.FOURTH;
         }
         if (matchCount == 3) {
-            return LottoRule.FIFTH;
+            return LottoRank.FIFTH;
         }
         return null;
     }

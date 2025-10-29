@@ -7,7 +7,7 @@ import java.util.Map;
 import lotto.domain.Lotto;
 import lotto.domain.WinningLotto;
 import lotto.enums.LottoConfig;
-import lotto.enums.LottoRule;
+import lotto.enums.LottoRank;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -29,25 +29,25 @@ public class LottoAnalyzerTest {
     @DisplayName("로또 당첨 결과 확인")
     public void testMatch() {
         // when
-        Map<LottoRule, Integer> result = lottoAnalyzer.match(lottos, winningLotto);
+        Map<LottoRank, Integer> result = lottoAnalyzer.match(lottos, winningLotto);
 
         // then
-        assertThat(result.get(LottoRule.FIRST)).isEqualTo(1);
-        assertThat(result.get(LottoRule.SECOND)).isEqualTo(1);
-        assertThat(result.get(LottoRule.THIRD)).isEqualTo(1);
-        assertThat(result.get(LottoRule.FOURTH)).isEqualTo(1);
-        assertThat(result.get(LottoRule.FIFTH)).isEqualTo(1);
+        assertThat(result.get(LottoRank.FIRST)).isEqualTo(1);
+        assertThat(result.get(LottoRank.SECOND)).isEqualTo(1);
+        assertThat(result.get(LottoRank.THIRD)).isEqualTo(1);
+        assertThat(result.get(LottoRank.FOURTH)).isEqualTo(1);
+        assertThat(result.get(LottoRank.FIFTH)).isEqualTo(1);
     }
 
     @Test
     @DisplayName("모든 등수가 결과에 포함되는지 확인")
     public void testAllRankInclude() {
         // when
-        Map<LottoRule, Integer> result = lottoAnalyzer.match(lottos, winningLotto);
+        Map<LottoRank, Integer> result = lottoAnalyzer.match(lottos, winningLotto);
 
         // then
         assertThat(result).containsKeys(
-                LottoRule.FIRST, LottoRule.SECOND, LottoRule.THIRD, LottoRule.FOURTH, LottoRule.FIFTH
+                LottoRank.FIRST, LottoRank.SECOND, LottoRank.THIRD, LottoRank.FOURTH, LottoRank.FIFTH
         );
     }
 
@@ -55,7 +55,7 @@ public class LottoAnalyzerTest {
     @DisplayName("당첨된 로또 개수의 합 확인")
     public void testTotalWinningCount() {
         // when
-        Map<LottoRule, Integer> result = lottoAnalyzer.match(lottos, winningLotto);
+        Map<LottoRank, Integer> result = lottoAnalyzer.match(lottos, winningLotto);
         int totalWinningCount = result.values().stream()
                 .mapToInt(Integer::intValue)
                 .sum();
@@ -70,12 +70,12 @@ public class LottoAnalyzerTest {
         // given
         int lottoCount = 7;
         int purchasePrice = lottoCount * LottoConfig.LOTTO_PRICE.getValue();
-        Map<LottoRule, Integer> result = Map.of(
-                LottoRule.FIRST, 0,
-                LottoRule.SECOND, 0,
-                LottoRule.THIRD, 0,
-                LottoRule.FOURTH, 0,
-                LottoRule.FIFTH, 1
+        Map<LottoRank, Integer> result = Map.of(
+                LottoRank.FIRST, 0,
+                LottoRank.SECOND, 0,
+                LottoRank.THIRD, 0,
+                LottoRank.FOURTH, 0,
+                LottoRank.FIFTH, 1
         );
 
         // when

@@ -1,4 +1,4 @@
-package lotto.util;
+package lotto.util.parser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -9,21 +9,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class BonusNumberParserTest {
+public class PurchasePriceParserTest {
 
-    private final BonusNumberParser bonusNumberParser = new BonusNumberParser();
+    private final PurchasePriceParser purchasePriceParser = new PurchasePriceParser();
 
     @Test
     @DisplayName("정상 입력 문자열의 경우, 파싱되는지 확인")
     public void testParse() {
         // given
-        String input = "7";
+        String input = "8000";
 
         // when
-        int result = bonusNumberParser.parse(input);
+        int result = purchasePriceParser.parse(input);
 
         // then
-        assertThat(result).isEqualTo(7);
+        assertThat(result).isEqualTo(8000);
     }
 
     @ParameterizedTest
@@ -31,9 +31,9 @@ public class BonusNumberParserTest {
     @ValueSource(strings = {"", " "})
     public void testParseBlank(String input) {
         // when & then
-        assertThatThrownBy(() -> bonusNumberParser.parse(input))
+        assertThatThrownBy(() -> purchasePriceParser.parse(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_BONUS_NUMBER_BLANK));
+                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_BLANK));
     }
 
     @ParameterizedTest
@@ -41,9 +41,9 @@ public class BonusNumberParserTest {
     @ValueSource(strings = {"A", "0.1", "."})
     public void testParseNonInteger(String input) {
         // when & then
-        assertThatThrownBy(() -> bonusNumberParser.parse(input))
+        assertThatThrownBy(() -> purchasePriceParser.parse(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_BONUS_NUMBER_NON_INTEGER));
+                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_NON_INTEGER));
 
     }
 }
