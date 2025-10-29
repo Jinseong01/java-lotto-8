@@ -9,6 +9,8 @@ import lotto.enums.LottoConfig;
 import lotto.enums.LottoRule;
 import lotto.service.LottoIssuer;
 import lotto.service.LottoAnalyzer;
+import lotto.util.BonusNumberParser;
+import lotto.util.PurchasePriceParser;
 import lotto.util.WinningNumberParser;
 import lotto.view.InputView;
 import lotto.view.OutputView;
@@ -20,10 +22,12 @@ public class Application {
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
         LottoIssuer lottoIssuer = new LottoIssuer();
+        PurchasePriceParser purchasePriceParser = new PurchasePriceParser();
         WinningNumberParser winningNumberParser = new WinningNumberParser();
+        BonusNumberParser bonusNumberParser = new BonusNumberParser();
         LottoAnalyzer lottoAnalyzer = new LottoAnalyzer();
 
-        int purchasePrice = Integer.parseInt(inputView.readPurchasePrice());
+        int purchasePrice = purchasePriceParser.parse(inputView.readPurchasePrice());
         outputView.printBlankLine();
 
         int lottoPrice = LottoConfig.LOTTO_PRICE.getValue();
@@ -41,7 +45,7 @@ public class Application {
 
         List<Integer> parsedWinningNumbers = winningNumberParser.parse(winningNumbers);
 
-        int bonusNumber = Integer.parseInt(inputView.readBounusNumber());
+        int bonusNumber = bonusNumberParser.parse(inputView.readBounusNumber());
         outputView.printBlankLine();
 
         WinningLotto winningLotto = new WinningLotto(parsedWinningNumbers, bonusNumber);
