@@ -8,7 +8,7 @@ import lotto.domain.Lotto;
 import lotto.domain.WinningLotto;
 import lotto.enums.LottoRule;
 
-public class LottoMatcher {
+public class LottoAnalyzer {
     public Map<LottoRule, Integer> match(List<Lotto> lottos, WinningLotto winningLotto) {
         EnumMap<LottoRule, Integer> result = initResult();
 
@@ -18,6 +18,20 @@ public class LottoMatcher {
         lottos.forEach(lotto -> checkPrize(lotto, winningNumbers, bonusNumber, result));
 
         return result;
+    }
+
+    public double calculateRateOfReturn(int price, Map<LottoRule, Integer> lottoResult) {
+        int totalWinningPrice = 0;
+
+        for (Map.Entry<LottoRule, Integer> entry : lottoResult.entrySet()) {
+            LottoRule rule = entry.getKey();
+            int count = entry.getValue();
+
+            totalWinningPrice += rule.getPrize() * count;
+        }
+
+        double rateOfReturn = ((double) totalWinningPrice / price) * 100;
+        return Math.round(rateOfReturn * 10) / 10.0;
     }
 
     private EnumMap<LottoRule, Integer> initResult() {

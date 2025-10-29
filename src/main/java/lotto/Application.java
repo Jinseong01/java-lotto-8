@@ -8,7 +8,7 @@ import lotto.domain.WinningLotto;
 import lotto.enums.LottoConfig;
 import lotto.enums.LottoRule;
 import lotto.service.LottoIssuer;
-import lotto.service.LottoMatcher;
+import lotto.service.LottoAnalyzer;
 import lotto.util.WinningNumberParser;
 import lotto.view.InputView;
 import lotto.view.OutputView;
@@ -21,7 +21,7 @@ public class Application {
         OutputView outputView = new OutputView();
         LottoIssuer lottoIssuer = new LottoIssuer();
         WinningNumberParser winningNumberParser = new WinningNumberParser();
-        LottoMatcher lottoMatcher = new LottoMatcher();
+        LottoAnalyzer lottoAnalyzer = new LottoAnalyzer();
 
         int purchasePrice = Integer.parseInt(inputView.readPurchasePrice());
         outputView.printBlankLine();
@@ -46,10 +46,12 @@ public class Application {
 
         WinningLotto winningLotto = new WinningLotto(parsedWinningNumbers, bonusNumber);
 
-        Map<LottoRule, Integer> result = lottoMatcher.match(userPurchase.getLottos(), winningLotto);
+        Map<LottoRule, Integer> result = lottoAnalyzer.match(userPurchase.getLottos(), winningLotto);
 
         outputView.printWinningResult(result);
 
-        outputView.printRateOfReturn(62.5);
+        double rateOfReturn = lottoAnalyzer.calculateRateOfReturn(userPurchase.getPrice(), result);
+
+        outputView.printRateOfReturn(rateOfReturn);
     }
 }
