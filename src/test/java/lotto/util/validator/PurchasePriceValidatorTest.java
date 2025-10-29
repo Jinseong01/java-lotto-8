@@ -17,7 +17,7 @@ public class PurchasePriceValidatorTest {
     public void testValidateRange(int input) {
         assertThatThrownBy(() -> purchasePriceValidator.validate(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_RANGE));
+                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_OUT_OF_RANGE));
     }
 
     @ParameterizedTest
@@ -26,6 +26,6 @@ public class PurchasePriceValidatorTest {
     public void testValidateUnit(int input) {
         assertThatThrownBy(() -> purchasePriceValidator.validate(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_UNIT));
+                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_INVALID_UNIT));
     }
 }

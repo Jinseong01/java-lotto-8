@@ -1,6 +1,8 @@
 package lotto.domain;
 
 import java.util.List;
+import lotto.enums.ErrorMessage;
+import lotto.enums.LottoConfig;
 
 public class Lotto {
     private final List<Integer> numbers;
@@ -15,10 +17,29 @@ public class Lotto {
     }
 
     private void validate(List<Integer> numbers) {
-        if (numbers.size() != 6) {
-            throw new IllegalArgumentException("[ERROR] 로또 번호는 6개여야 합니다.");
+        validateCount(numbers);
+        validateDuplicate(numbers);
+        validateRange(numbers);
+    }
+
+    private void validateCount(List<Integer> numbers) {
+        if (numbers.size() != LottoConfig.LOTTO_NUMBERS_COUNT.getValue()) {
+            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_LOTTO_INVALID_COUNT));
         }
     }
 
-    // TODO: 추가 기능 구현
+    private void validateDuplicate(List<Integer> numbers) {
+        if (numbers.stream().distinct().count() != numbers.size()) {
+            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_LOTTO_NUMBER_DUPLICATE));
+        }
+    }
+
+    private void validateRange(List<Integer> numbers) {
+        numbers.forEach(number -> {
+            if (number < LottoConfig.LOTTO_MIN_NUMBER.getValue() || number > LottoConfig.LOTTO_MAX_NUMBER.getValue()) {
+                throw new IllegalArgumentException(
+                        ErrorMessage.getMessage(ErrorMessage.ERROR_LOTTO_NUMBER_OUT_OF_RANGE));
+            }
+        });
+    }
 }

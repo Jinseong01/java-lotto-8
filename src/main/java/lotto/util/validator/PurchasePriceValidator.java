@@ -16,13 +16,13 @@ public class PurchasePriceValidator extends LottoValidator<Integer> {
 
     private void validateRange(Integer input) {
         if (input < MIN_PURCHASE_PRICE || input > MAX_PURCHASE_PRICE) {
-            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_RANGE));
+            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_OUT_OF_RANGE));
         }
     }
 
     private void validateUnit(Integer input) {
         if (input % LottoConfig.LOTTO_PRICE.getValue() != 0) {
-            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_UNIT));
+            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_INVALID_UNIT));
         }
     }
 }

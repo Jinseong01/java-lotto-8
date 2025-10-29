@@ -20,7 +20,7 @@ public class BonusNumberValidator extends LottoValidator<List<Integer>> {
 
     private void validateRange(Integer input) {
         if (input < MIN_BONUS_NUMBER || input > MAX_BONUS_NUMBER) {
-            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_BONUS_NUMBER_RANGE));
+            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_BONUS_NUMBER_OUT_OF_RANGE));
         }
     }
 
