@@ -13,8 +13,9 @@ public class PurchasePriceValidatorTest {
 
     @ParameterizedTest
     @DisplayName("최소/최대 범위 이외의 값 입력 시, 예외 발생")
-    @ValueSource(ints = {4000, 120_000})
+    @ValueSource(ints = {4_000, 120_000})
     public void testValidateRange(int input) {
+        // when & then
         assertThatThrownBy(() -> purchasePriceValidator.validate(input))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_OUT_OF_RANGE));
@@ -24,6 +25,7 @@ public class PurchasePriceValidatorTest {
     @DisplayName("로또 가격 단위 미준수 금액 입력 시, 예외 발생")
     @ValueSource(ints = {5_500, 12_345})
     public void testValidateUnit(int input) {
+        // when & then
         assertThatThrownBy(() -> purchasePriceValidator.validate(input))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_INVALID_UNIT));
