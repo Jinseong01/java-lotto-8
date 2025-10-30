@@ -1,11 +1,11 @@
 package lotto.domain;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import lotto.enums.ErrorMessage;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class LottoTest {
     @Test
@@ -21,5 +21,11 @@ class LottoTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    // TODO: 추가 기능 구현에 따른 테스트 코드 작성
+    @Test
+    @DisplayName("최소/최대 범위 이외의 값 입력 시, 예외 발생")
+    public void testValidateRange() {
+        assertThatThrownBy(() -> new Lotto(List.of(1, 2, 3, 4, 5, 100)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_LOTTO_NUMBER_OUT_OF_RANGE));
+    }
 }
