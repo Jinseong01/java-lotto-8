@@ -1,16 +1,15 @@
 package lotto.util.validator;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 import lotto.enums.ErrorMessage;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 public class BonusNumberValidatorTest {
 
@@ -28,6 +27,16 @@ public class BonusNumberValidatorTest {
                 Arrays.asList(1, 2, 3, 4, 5, 6, 1),
                 Arrays.asList(1, 2, 3, 4, 5, 6, 6)
         );
+    }
+
+    @Test
+    @DisplayName("정상값의 경우, 검증 통과하는지 확인")
+    public void testValidate() {
+        // given
+        List<Integer> input = Arrays.asList(1, 2, 3, 4, 5, 6, 40);
+
+        // when & then
+        assertDoesNotThrow(() -> bonusNumberValidator.validate(input));
     }
 
     @ParameterizedTest
