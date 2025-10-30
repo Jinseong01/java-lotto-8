@@ -8,6 +8,7 @@ import lotto.util.parser.PurchasePriceParser;
 import lotto.util.validator.BonusNumberValidator;
 import lotto.util.validator.PurchasePriceValidator;
 import lotto.util.parser.WinningNumberParser;
+import lotto.util.validator.WinningNumberValidator;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -21,12 +22,14 @@ public class Application {
         PurchasePriceParser purchasePriceParser = new PurchasePriceParser();
         PurchasePriceValidator purchasePriceValidator = new PurchasePriceValidator();
         WinningNumberParser winningNumberParser = new WinningNumberParser();
+        WinningNumberValidator winningNumberValidator = new WinningNumberValidator();
         BonusNumberParser bonusNumberParser = new BonusNumberParser();
         BonusNumberValidator bonusNumberValidator = new BonusNumberValidator();
         LottoAnalyzer lottoAnalyzer = new LottoAnalyzer();
 
         LottoController lottoController = new LottoController(inputView, outputView, lottoIssuer, lottoAnalyzer,
-                purchasePriceParser, purchasePriceValidator, winningNumberParser, bonusNumberParser, bonusNumberValidator);
+                purchasePriceParser, purchasePriceValidator, winningNumberParser, winningNumberValidator,
+                bonusNumberParser, bonusNumberValidator);
 
         lottoController.run();
     }

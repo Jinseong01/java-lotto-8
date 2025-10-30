@@ -35,11 +35,10 @@ public class Lotto {
     }
 
     private void validateRange(List<Integer> numbers) {
-        numbers.forEach(number -> {
-            if (number < LottoConfig.LOTTO_MIN_NUMBER.getValue() || number > LottoConfig.LOTTO_MAX_NUMBER.getValue()) {
-                throw new IllegalArgumentException(
-                        ErrorMessage.getMessage(ErrorMessage.ERROR_LOTTO_NUMBER_OUT_OF_RANGE));
-            }
-        });
+        if (numbers.stream().anyMatch(number -> number < LottoConfig.LOTTO_MIN_NUMBER.getValue()
+                || number > LottoConfig.LOTTO_MAX_NUMBER.getValue())) {
+            throw new IllegalArgumentException(
+                    ErrorMessage.getMessage(ErrorMessage.ERROR_LOTTO_NUMBER_OUT_OF_RANGE));
+        }
     }
 }

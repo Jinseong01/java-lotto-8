@@ -15,6 +15,7 @@ import lotto.util.parser.PurchasePriceParser;
 import lotto.util.parser.WinningNumberParser;
 import lotto.util.validator.BonusNumberValidator;
 import lotto.util.validator.PurchasePriceValidator;
+import lotto.util.validator.WinningNumberValidator;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -27,6 +28,7 @@ public class LottoController {
     private final PurchasePriceParser purchasePriceParser;
     private final PurchasePriceValidator purchasePriceValidator;
     private final WinningNumberParser winningNumberParser;
+    private final WinningNumberValidator winningNumberValidator;
     private final BonusNumberParser bonusNumberParser;
     private final BonusNumberValidator bonusNumberValidator;
 
@@ -34,6 +36,7 @@ public class LottoController {
     public LottoController(InputView inputView, OutputView outputView, LottoIssuer lottoIssuer,
                            LottoAnalyzer lottoAnalyzer, PurchasePriceParser purchasePriceParser,
                            PurchasePriceValidator purchasePriceValidator, WinningNumberParser winningNumberParser,
+                           WinningNumberValidator winningNumberValidator,
                            BonusNumberParser bonusNumberParser, BonusNumberValidator bonusNumberValidator) {
         this.inputView = inputView;
         this.outputView = outputView;
@@ -42,6 +45,7 @@ public class LottoController {
         this.purchasePriceParser = purchasePriceParser;
         this.purchasePriceValidator = purchasePriceValidator;
         this.winningNumberParser = winningNumberParser;
+        this.winningNumberValidator = winningNumberValidator;
         this.bonusNumberParser = bonusNumberParser;
         this.bonusNumberValidator = bonusNumberValidator;
     }
@@ -59,17 +63,14 @@ public class LottoController {
         UserPurchase userPurchase = new UserPurchase(purchasePrice, lottos);
 
         List<Integer> parsedWinningNumbers = readWinningNumber();
-
         int bonusNumber = readBonusNumber(parsedWinningNumbers);
 
         WinningLotto winningLotto = new WinningLotto(parsedWinningNumbers, bonusNumber);
 
         Map<LottoRank, Integer> result = lottoAnalyzer.match(userPurchase.getLottos(), winningLotto);
-
         outputView.printWinningResult(result);
 
         double rateOfReturn = lottoAnalyzer.calculateRateOfReturn(userPurchase.getPrice(), result);
-
         outputView.printRateOfReturn(rateOfReturn);
     }
 
@@ -93,8 +94,10 @@ public class LottoController {
         while (true) {
             try {
                 String input = inputView.readWinningNumber();
+
                 List<Integer> parsedWinningNumbers = winningNumberParser.parse(input);
-                // TODO WinningNumberValidator 구현
+                winningNumberValidator.validate(parsedWinningNumbers);
+
                 outputView.printBlankLine();
                 return parsedWinningNumbers;
             } catch (IllegalArgumentException e) {
