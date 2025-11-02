@@ -1,6 +1,5 @@
 package lotto.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
@@ -10,12 +9,7 @@ import lotto.enums.LottoConfig;
 import lotto.enums.LottoRank;
 import lotto.service.LottoAnalyzer;
 import lotto.service.LottoIssuer;
-import lotto.util.parser.BonusNumberParser;
-import lotto.util.parser.PurchasePriceParser;
-import lotto.util.parser.WinningNumberParser;
-import lotto.util.validator.BonusNumberValidator;
-import lotto.util.validator.PurchasePriceValidator;
-import lotto.util.validator.WinningNumberValidator;
+import lotto.util.InputProcessor;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -25,29 +19,15 @@ public class LottoController {
     private final OutputView outputView;
     private final LottoIssuer lottoIssuer;
     private final LottoAnalyzer lottoAnalyzer;
-    private final PurchasePriceParser purchasePriceParser;
-    private final PurchasePriceValidator purchasePriceValidator;
-    private final WinningNumberParser winningNumberParser;
-    private final WinningNumberValidator winningNumberValidator;
-    private final BonusNumberParser bonusNumberParser;
-    private final BonusNumberValidator bonusNumberValidator;
-
+    private final InputProcessor inputProcessor;
 
     public LottoController(InputView inputView, OutputView outputView, LottoIssuer lottoIssuer,
-                           LottoAnalyzer lottoAnalyzer, PurchasePriceParser purchasePriceParser,
-                           PurchasePriceValidator purchasePriceValidator, WinningNumberParser winningNumberParser,
-                           WinningNumberValidator winningNumberValidator,
-                           BonusNumberParser bonusNumberParser, BonusNumberValidator bonusNumberValidator) {
+                           LottoAnalyzer lottoAnalyzer, InputProcessor inputProcessor) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.lottoIssuer = lottoIssuer;
         this.lottoAnalyzer = lottoAnalyzer;
-        this.purchasePriceParser = purchasePriceParser;
-        this.purchasePriceValidator = purchasePriceValidator;
-        this.winningNumberParser = winningNumberParser;
-        this.winningNumberValidator = winningNumberValidator;
-        this.bonusNumberParser = bonusNumberParser;
-        this.bonusNumberValidator = bonusNumberValidator;
+        this.inputProcessor = inputProcessor;
     }
 
     public void run() {
@@ -64,8 +44,7 @@ public class LottoController {
         while (true) {
             try {
                 String input = inputView.readPurchasePrice();
-                int purchasePrice = purchasePriceParser.parse(input);
-                purchasePriceValidator.validate(purchasePrice);
+                int purchasePrice = inputProcessor.processPurchasePrice(input);
                 outputView.printBlankLine();
                 return purchasePrice;
             } catch (IllegalArgumentException e) {
@@ -92,8 +71,7 @@ public class LottoController {
         while (true) {
             try {
                 String input = inputView.readWinningNumber();
-                List<Integer> parsedWinningNumbers = winningNumberParser.parse(input);
-                winningNumberValidator.validate(parsedWinningNumbers);
+                List<Integer> parsedWinningNumbers = inputProcessor.processWinningNumbers(input);
                 outputView.printBlankLine();
                 return parsedWinningNumbers;
             } catch (IllegalArgumentException e) {
@@ -106,13 +84,8 @@ public class LottoController {
         while (true) {
             try {
                 String input = inputView.readBonusNumber();
-                int bonusNumber = bonusNumberParser.parse(input);
-
-                List<Integer> winningLottoNumbers = new ArrayList<>(parsedWinningNumbers);
-                winningLottoNumbers.add(bonusNumber);
-                bonusNumberValidator.validate(winningLottoNumbers);
+                int bonusNumber = inputProcessor.processBonusNumber(input, parsedWinningNumbers);
                 outputView.printBlankLine();
-
                 return bonusNumber;
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());

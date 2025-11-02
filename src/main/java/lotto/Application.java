@@ -3,6 +3,7 @@ package lotto;
 import lotto.controller.LottoController;
 import lotto.service.LottoAnalyzer;
 import lotto.service.LottoIssuer;
+import lotto.util.InputProcessor;
 import lotto.util.parser.BonusNumberParser;
 import lotto.util.parser.PurchasePriceParser;
 import lotto.util.parser.WinningNumberParser;
@@ -14,22 +15,22 @@ import lotto.view.OutputView;
 
 public class Application {
     public static void main(String[] args) {
-        // TODO: 프로그램 구현
-
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
         LottoIssuer lottoIssuer = new LottoIssuer();
+        LottoAnalyzer lottoAnalyzer = new LottoAnalyzer();
+
         PurchasePriceParser purchasePriceParser = new PurchasePriceParser();
         PurchasePriceValidator purchasePriceValidator = new PurchasePriceValidator();
         WinningNumberParser winningNumberParser = new WinningNumberParser();
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator();
         BonusNumberParser bonusNumberParser = new BonusNumberParser();
         BonusNumberValidator bonusNumberValidator = new BonusNumberValidator();
-        LottoAnalyzer lottoAnalyzer = new LottoAnalyzer();
+        InputProcessor inputProcessor = new InputProcessor(purchasePriceParser, purchasePriceValidator,
+                winningNumberParser, winningNumberValidator, bonusNumberParser, bonusNumberValidator);
 
         LottoController lottoController = new LottoController(inputView, outputView, lottoIssuer, lottoAnalyzer,
-                purchasePriceParser, purchasePriceValidator, winningNumberParser, winningNumberValidator,
-                bonusNumberParser, bonusNumberValidator);
+                inputProcessor);
 
         lottoController.run();
     }
