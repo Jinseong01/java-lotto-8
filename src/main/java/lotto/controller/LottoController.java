@@ -52,36 +52,20 @@ public class LottoController {
 
     public void run() {
         int purchasePrice = readPurchasePrice();
-
-        int lottoPrice = LottoConfig.LOTTO_PRICE.getValue();
-        int lottoCount = purchasePrice / lottoPrice;
-        outputView.printLottoCount(lottoCount);
-
-        List<Lotto> lottos = lottoIssuer.issue(lottoCount);
-        outputView.printLottoNumber(lottos);
+        List<Lotto> lottos = issueLottos(purchasePrice);
 
         UserPurchase userPurchase = new UserPurchase(purchasePrice, lottos);
+        WinningLotto winningLotto = readWinningLotto();
 
-        List<Integer> parsedWinningNumbers = readWinningNumber();
-        int bonusNumber = readBonusNumber(parsedWinningNumbers);
-
-        WinningLotto winningLotto = new WinningLotto(parsedWinningNumbers, bonusNumber);
-
-        Map<LottoRank, Integer> result = lottoAnalyzer.match(userPurchase.getLottos(), winningLotto);
-        outputView.printWinningResult(result);
-
-        double rateOfReturn = lottoAnalyzer.calculateRateOfReturn(userPurchase.getPrice(), result);
-        outputView.printRateOfReturn(rateOfReturn);
+        analyzeLottos(userPurchase, winningLotto);
     }
 
     private int readPurchasePrice() {
         while (true) {
             try {
                 String input = inputView.readPurchasePrice();
-
                 int purchasePrice = purchasePriceParser.parse(input);
                 purchasePriceValidator.validate(purchasePrice);
-
                 outputView.printBlankLine();
                 return purchasePrice;
             } catch (IllegalArgumentException e) {
@@ -90,14 +74,26 @@ public class LottoController {
         }
     }
 
+    private List<Lotto> issueLottos(int purchasePrice) {
+        int lottoCount = purchasePrice / LottoConfig.LOTTO_PRICE.getValue();
+        outputView.printLottoCount(lottoCount);
+        List<Lotto> lottos = lottoIssuer.issue(lottoCount);
+        outputView.printLottoNumber(lottos);
+        return lottos;
+    }
+
+    private WinningLotto readWinningLotto() {
+        List<Integer> winningNumbers = readWinningNumber();
+        int bonusNumber = readBonusNumber(winningNumbers);
+        return new WinningLotto(winningNumbers, bonusNumber);
+    }
+
     private List<Integer> readWinningNumber() {
         while (true) {
             try {
                 String input = inputView.readWinningNumber();
-
                 List<Integer> parsedWinningNumbers = winningNumberParser.parse(input);
                 winningNumberValidator.validate(parsedWinningNumbers);
-
                 outputView.printBlankLine();
                 return parsedWinningNumbers;
             } catch (IllegalArgumentException e) {
@@ -109,7 +105,7 @@ public class LottoController {
     private int readBonusNumber(List<Integer> parsedWinningNumbers) {
         while (true) {
             try {
-                String input = inputView.readBounusNumber();
+                String input = inputView.readBonusNumber();
                 int bonusNumber = bonusNumberParser.parse(input);
 
                 List<Integer> winningLottoNumbers = new ArrayList<>(parsedWinningNumbers);
@@ -122,5 +118,12 @@ public class LottoController {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
+    }
+
+    private void analyzeLottos(UserPurchase userPurchase, WinningLotto winningLotto) {
+        Map<LottoRank, Integer> result = lottoAnalyzer.match(userPurchase.getLottos(), winningLotto);
+        outputView.printWinningResult(result);
+        double rateOfReturn = lottoAnalyzer.calculateRateOfReturn(userPurchase.getPrice(), result);
+        outputView.printRateOfReturn(rateOfReturn);
     }
 }

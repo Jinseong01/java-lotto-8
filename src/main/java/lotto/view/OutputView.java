@@ -24,7 +24,6 @@ public class OutputView {
         StringBuilder sb = new StringBuilder();
 
         sb.append(OutputMessage.VIEW_WINNING_HEADER.getMessage()).append("\n");
-
         Arrays.stream(LottoRank.values()).forEach(lottoRank -> {
             int count = prizeCounts.get(lottoRank);
             sb.append(String.format(OutputMessage.VIEW_WINNING_RESULT.getMessage(), lottoRank.getDescription(),
