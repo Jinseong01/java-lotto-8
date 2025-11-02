@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import lotto.enums.ErrorMessage;
 
-public class WinningNumberParser extends LottoParser<List<Integer>> {
+public class WinningNumberParser extends IntegerBasedParser<List<Integer>> {
 
     private static final String DELIMITER = ",";
 

@@ -1,6 +1,6 @@
 package lotto.util.parser;
 
-public abstract class IntegerParser extends LottoParser<Integer> {
+public abstract class IntegerParser extends IntegerBasedParser<Integer> {
     @Override
     public Integer parse(String input) {
         checkBlank(input);
