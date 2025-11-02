@@ -19,19 +19,23 @@ public class Application {
         OutputView outputView = new OutputView();
         LottoIssuer lottoIssuer = new LottoIssuer();
         LottoAnalyzer lottoAnalyzer = new LottoAnalyzer();
+        InputProcessor inputProcessor = createInputProcessor();
 
+        LottoController lottoController = new LottoController(inputView, outputView, lottoIssuer, lottoAnalyzer,
+                inputProcessor);
+
+        lottoController.run();
+    }
+
+    private static InputProcessor createInputProcessor() {
         PurchasePriceParser purchasePriceParser = new PurchasePriceParser();
         PurchasePriceValidator purchasePriceValidator = new PurchasePriceValidator();
         WinningNumberParser winningNumberParser = new WinningNumberParser();
         WinningNumberValidator winningNumberValidator = new WinningNumberValidator();
         BonusNumberParser bonusNumberParser = new BonusNumberParser();
         BonusNumberValidator bonusNumberValidator = new BonusNumberValidator();
-        InputProcessor inputProcessor = new InputProcessor(purchasePriceParser, purchasePriceValidator,
+
+        return new InputProcessor(purchasePriceParser, purchasePriceValidator,
                 winningNumberParser, winningNumberValidator, bonusNumberParser, bonusNumberValidator);
-
-        LottoController lottoController = new LottoController(inputView, outputView, lottoIssuer, lottoAnalyzer,
-                inputProcessor);
-
-        lottoController.run();
     }
 }

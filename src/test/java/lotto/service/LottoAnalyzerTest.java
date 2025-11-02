@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.Lotto;
-import lotto.domain.WinningLotto;
+import lotto.dto.WinningLotto;
 import lotto.enums.LottoConfig;
 import lotto.enums.LottoRank;
 import org.junit.jupiter.api.DisplayName;

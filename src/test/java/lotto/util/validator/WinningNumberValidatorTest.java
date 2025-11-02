@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.util.Arrays;
 import java.util.List;
 import lotto.enums.ErrorMessage;
+import lotto.enums.LottoConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -53,7 +54,8 @@ public class WinningNumberValidatorTest {
         // when & then
         assertThatThrownBy(() -> winningNumberValidator.validate(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_OUT_OF_RANGE));
+                .hasMessage(String.format(ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_OUT_OF_RANGE),
+                        LottoConfig.LOTTO_MIN_NUMBER.getValue(), LottoConfig.LOTTO_MAX_NUMBER.getValue()));
     }
 
     @ParameterizedTest
@@ -72,6 +74,7 @@ public class WinningNumberValidatorTest {
     public void testValidateInvalidCount(List<Integer> input) {
         assertThatThrownBy(() -> winningNumberValidator.validate(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_INVALID_COUNT));
+                .hasMessage(String.format(ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_INVALID_COUNT),
+                        LottoConfig.LOTTO_NUMBERS_COUNT.getValue()));
     }
 }

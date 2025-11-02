@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.util.Arrays;
 import java.util.List;
 import lotto.enums.ErrorMessage;
+import lotto.enums.LottoConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -46,7 +47,8 @@ public class BonusNumberValidatorTest {
         // when & then
         assertThatThrownBy(() -> bonusNumberValidator.validate(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_BONUS_NUMBER_OUT_OF_RANGE));
+                .hasMessage(String.format(ErrorMessage.getMessage(ErrorMessage.ERROR_BONUS_NUMBER_OUT_OF_RANGE),
+                        LottoConfig.LOTTO_MIN_NUMBER.getValue(), LottoConfig.LOTTO_MAX_NUMBER.getValue()));
     }
 
     @ParameterizedTest

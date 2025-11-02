@@ -20,7 +20,8 @@ public class WinningNumberValidator extends LottoValidator<List<Integer>> {
     private void validateRange(List<Integer> input) {
         if (input.stream().anyMatch(value -> value < MIN_WINNING_NUMBER || value > MAX_WINNING_NUMBER)) {
             throw new IllegalArgumentException(
-                    ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_OUT_OF_RANGE));
+                    String.format(ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_OUT_OF_RANGE),
+                            MIN_WINNING_NUMBER, MAX_WINNING_NUMBER));
         }
     }
 
@@ -33,7 +34,8 @@ public class WinningNumberValidator extends LottoValidator<List<Integer>> {
     private void validateCount(List<Integer> input) {
         if (input.size() != WINNING_NUMBER_COUNT) {
             throw new IllegalArgumentException(
-                    ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_INVALID_COUNT));
+                    String.format(ErrorMessage.getMessage(ErrorMessage.ERROR_WINNING_NUMBER_INVALID_COUNT),
+                            WINNING_NUMBER_COUNT));
         }
     }
 }

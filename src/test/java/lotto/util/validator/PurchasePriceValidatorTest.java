@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import lotto.enums.ErrorMessage;
+import lotto.enums.LottoConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +31,9 @@ public class PurchasePriceValidatorTest {
         // when & then
         assertThatThrownBy(() -> purchasePriceValidator.validate(input))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_OUT_OF_RANGE));
+                .hasMessage(String.format(
+                        ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_OUT_OF_RANGE),
+                        LottoConfig.PURCHASE_MIN_PRICE.getValue(), LottoConfig.PURCHASE_MAX_PRICE.getValue()));
     }
 
     @ParameterizedTest

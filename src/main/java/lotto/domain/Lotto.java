@@ -24,7 +24,9 @@ public class Lotto {
 
     private void validateCount(List<Integer> numbers) {
         if (numbers.size() != LottoConfig.LOTTO_NUMBERS_COUNT.getValue()) {
-            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_LOTTO_INVALID_COUNT));
+            throw new IllegalArgumentException(
+                    String.format(ErrorMessage.getMessage(ErrorMessage.ERROR_LOTTO_INVALID_COUNT),
+                            LottoConfig.LOTTO_NUMBERS_COUNT.getValue()));
         }
     }
 

@@ -5,8 +5,8 @@ import lotto.enums.LottoConfig;
 
 public class PurchasePriceValidator extends LottoValidator<Integer> {
 
-    private static final int MIN_PURCHASE_PRICE = 5_000;
-    private static final int MAX_PURCHASE_PRICE = 100_000;
+    private static final int MIN_PURCHASE_PRICE = LottoConfig.PURCHASE_MIN_PRICE.getValue();
+    private static final int MAX_PURCHASE_PRICE = LottoConfig.PURCHASE_MAX_PRICE.getValue();
 
     @Override
     public void validate(Integer input) {
@@ -16,7 +16,9 @@ public class PurchasePriceValidator extends LottoValidator<Integer> {
 
     private void validateRange(Integer input) {
         if (input < MIN_PURCHASE_PRICE || input > MAX_PURCHASE_PRICE) {
-            throw new IllegalArgumentException(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_OUT_OF_RANGE));
+            throw new IllegalArgumentException(
+                    String.format(ErrorMessage.getMessage(ErrorMessage.ERROR_PURCHASE_PRICE_OUT_OF_RANGE),
+                            MIN_PURCHASE_PRICE, MAX_PURCHASE_PRICE));
         }
     }
 
